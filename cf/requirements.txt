@@ -1,0 +1,5 @@
+cryptography
+psycopg2-binary
+prettytable
+flask
+

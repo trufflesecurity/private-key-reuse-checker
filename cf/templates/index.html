@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Certificate Query</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container {
+            max-width: 800px;
+            padding-top: 50px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        /* Loading overlay styles */
+        .loading-overlay {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+            z-index: 1000; /* Ensure it's on top */
+            justify-content: center;
+            align-items: center;
+        }
+        .loading-content {
+            text-align: center;
+        }
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Certificate Query</h1>
+        {% if error %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+        {% endif %}
+        <form method="post" onsubmit="showLoading()">
+            <div class="mb-3">
+                <label for="certificate" class="form-label">Paste your certificate here:</label>
+                <textarea class="form-control" id="certificate" name="certificate" rows="10" placeholder="-----BEGIN CERTIFICATE-----
+MIIDdzCCAl+gAwIBAgIEbSx+PjANBgkqhkiG9w0BAQsFADBvMQswCQYDVQQGEwJV
+...
+-----END CERTIFICATE-----">{{ certificate|default('') }}</textarea>
+            </div>
+            <div class="mb-3">
+                <label for="public_key" class="form-label">Or paste your public key here:</label>
+                <textarea class="form-control" id="public_key" name="public_key" rows="10" placeholder="-----BEGIN PUBLIC KEY-----
+MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBALv0v...
+-----END PUBLIC KEY-----">{{ public_key|default('') }}</textarea>
+            </div>
+            <p>Note: Please provide either a certificate or a public key.</p>
+            <button type="submit" class="btn btn-primary" id="submitButton">Submit</button>
+        </form>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-3">Crt.sh can be SOOOO slow, please wait a few seconds...</p>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function showLoading() {
+            // Show the loading overlay
+            var loadingOverlay = document.getElementById('loadingOverlay');
+            loadingOverlay.style.display = 'flex'; // Set display to flex to show the overlay
+            // Add 'd-flex' class to enable Bootstrap's flex utilities
+            loadingOverlay.classList.add('d-flex');
+            // Disable the submit button to prevent multiple submissions
+            document.getElementById('submitButton').disabled = true;
+        }
+    </script>
+  </body>
+</html>
